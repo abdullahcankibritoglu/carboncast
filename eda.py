@@ -10,20 +10,20 @@ def get_data():
 # Load data
 df = get_data()
 
-# Clean data: remove non-country rows (regions, continents, income groups)
+
 df = df[df["iso_code"].notna()]
 df = df.sort_values(["country", "year"])
 
-# Define features and target
+
 features = ['year', 'gdp', 'other_renewable_consumption', 
             'population', 'fossil_fuel_consumption']
 target = 'carbon_intensity_elec'
 
-# Drop rows with missing values
+
 df.dropna(subset=features, inplace=True)
 df.dropna(subset=[target], inplace=True)
 
-# Train/test split (time-aware)
+
 train = df[df["year"] <= 2018]
 test = df[df["year"] > 2018]
 
@@ -33,7 +33,7 @@ y_train = train[target]
 X_test = test[features]
 y_test = test[target]
 
-# Train XGBoost model
+# Train model
 model = XGBRegressor(n_estimators=1000, random_state=42)
 model.fit(X_train, y_train)
 score = model.score(X_test, y_test)
